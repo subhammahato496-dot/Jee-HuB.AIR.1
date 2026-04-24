@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target AIR 1 Hub - Ultimate Edition</title>
+    
+    <style>
+        /* --- WEBSITE CORE DESIGN --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-top: 40px; padding-bottom: 60px; }
+
+        .glass-box { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 0 20px rgba(79, 172, 254, 0.2); padding: 30px; text-align: center; }
+
+        .hero { width: 90%; max-width: 900px; margin-bottom: 30px; animation: fadeIn 1s ease-in-out; position: relative; }
+        h1 { font-size: 2.8rem; margin-bottom: 10px; }
+        .highlight { background: linear-gradient(45deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; }
+        
+        .section-title { font-size: 1.8rem; margin: 30px 0 15px 0; color: #e2e8f0; text-align: center; width: 100%; }
+
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; width: 95%; max-width: 1000px; margin-bottom: 20px; }
+        .card { width: 300px; transition: transform 0.4s ease, box-shadow 0.4s ease; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(79, 172, 254, 0.2); border: 1px solid rgba(79, 172, 254, 0.5); }
+        .card h3 { font-size: 1.4rem; margin: 10px 0; color: #fff; }
+        .card p { color: #94a3b8; margin-bottom: 20px; font-size: 0.95rem; }
+        
+        .badge { background: linear-gradient(45deg, #f6d365, #fda085); color: black; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; display: inline-block; text-transform: uppercase; margin-bottom: 5px; align-self: flex-start; }
+        .video-badge { background: linear-gradient(45deg, #ff0844, #ffb199); color: white; }
+        .english-badge { background: linear-gradient(45deg, #a18cd1, #fbc2eb); color: #0f172a; }
+        .todo-badge { background: linear-gradient(45deg, #43e97b, #38f9d7); color: #0f172a; }
+        
+        .card-btn { display: inline-block; padding: 10px 20px; background: #4facfe; color: #0f172a; text-decoration: none; font-weight: bold; border-radius: 25px; transition: 0.3s; border: none; cursor: pointer; width: 100%; margin-top: auto; }
+        .card-btn:hover { background: #00f2fe; box-shadow: 0 0 15px #00f2fe; }
+
+        /* --- VIRAL SHARE BUTTON --- */
+        .share-btn { margin-top: 15px; padding: 10px 25px; background: linear-gradient(45deg, #f6d365, #fda085); border: none; border-radius: 30px; color: black; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .share-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px #fda085; }
+
+        /* --- PROGRESS BAR DESIGN --- */
+        .progress-container { width: 100%; background: rgba(0,0,0,0.4); border-radius: 15px; height: 25px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .progress-fill { height: 100%; background: linear-gradient(45deg, #00f2fe, #4facfe); width: 15%; transition: width 0.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: bold; font-size: 0.8rem; color: #0f172a; }
+
+        /* --- AI CHAT WIDGET DESIGN --- */
+        .my-chat-btn { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(45deg, #00f2fe, #4facfe); color: #0f172a; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 0 20px rgba(79, 172, 254, 0.5); z-index: 1000; }
+        .my-chat-window { position: fixed; bottom: 100px; right: 30px; width: 320px; height: 450px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(79, 172, 254, 0.3); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); display: none; flex-direction: column; overflow: hidden; z-index: 1000; }
+        .my-chat-header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 15px; text-align: center; border-bottom: 1px solid #4facfe; color: white; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .my-chat-body { flex: 1; padding: 15px; color: #cbd5e1; font-size: 0.95rem; overflow-y: auto; }
+        .msg-user { background: rgba(255, 255, 255, 0.1); padding: 10px; border-radius: 10px 10px 0 10px; margin: 10px 0 10px auto; color: #4facfe; width: fit-content; max-width: 80%; text-align: right; }
+        .msg-ai { background: rgba(79, 172, 254, 0.2); padding: 10px; border-radius: 10px 10px 10px 0; margin: 10px auto 10px 0; width: fit-content; max-width: 90%; line-height: 1.4; }
+        .my-chat-input-area { display: flex; padding: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .my-chat-input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #4facfe; background: rgba(0, 0, 0, 0.3); color: white; outline: none; }
+        .my-send-btn { background: #4facfe; color: #0f172a; border: none; padding: 10px 15px; margin-left: 10px; border-radius: 50%; cursor: pointer; font-weight: bold; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div class="hero glass-box">    
+        <h1>Mission <span class="highlight">IIT </span></h1>
+        <p>Premium Books, Notes, and Lectures. 100% Free.</p>
+        <button onclick="shareWebsite()" class="share-btn">🔗 Share with Friends</button>
+    </div>
+
+    <div class="glass-box" style="width: 90%; max-width: 900px; margin-bottom: 10px; padding: 20px;">
+        <h3 style="color: #00f2fe; text-align: left;">🚀 Class 11+12 Syllabus Tracker</h3>
+        <p style="text-align: left; color: #94a3b8; font-size: 0.9rem;">Target: Complete by November</p>
+        <div class="progress-container">
+            <div class="progress-fill" id="syllabus-bar">15%</div>
+        </div>
+        <button onclick="increaseProgress()" class="card-btn" style="width: auto; padding: 8px 15px; font-size: 0.85rem;">+ Mark Chapter Done</button>
+    </div>
+
+    <h2 class="section-title">Study & Multi-Tasking Hub</h2>
+    
+    <div class="container">
+        
+        <div class="card glass-box">
+            <div class="badge">Notes</div>
+            <h3>Jee Meterial</h3>
+            <p>Top rankers ke handwritten notes aur concept maps.</p>
+            <a href="https://t.me/TARGETAIRHUB/74?single" target="_blank" class="card-btn" style="text-align: center;">Download on Telegram</a>
+        </div>
+
+        <div class="card glass-box">
+            <div class="badge todo-badge">Planner</div>
+            <h3>Daily Targets</h3>
+            <ul id="todo-list" style="list-style: none; padding: 0; margin-bottom: 15px; max-height: 100px; overflow-y: auto;">
+                <li style="text-align: left; margin: 5px 0; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 5px; cursor: pointer;" onclick="this.style.textDecoration='line-through'; this.style.color='#94a3b8';">🔲 Revise </li>
+            </ul>
+            <div style="display: flex; gap: 5px; margin-top: auto;">
+                <input type="text" id="todo-input" placeholder="Naya task likho..." style="flex:1; padding:8px; border-radius:15px; border:1px solid #4facfe; background:rgba(0,0,0,0.3); color:white; outline:none;">
+                <button onclick="addTask()" style="background:#4facfe; border:none; padding:8px 12px; border-radius:15px; cursor:pointer; font-weight:bold;">+</button>
+            </div>
+        </div>
+
+        <div class="card glass-box">
+            <div class="badge english-badge">English Corner</div>
+            <h3>Daily Grammar</h3>
+            <p style="text-align: left;"><b>Rule of the day:</b><br>Bade sapne dekhne walon ko fluently bolna aana chahiye.<br><br><i>"I am focusing on completing my grammar."</i></p>
+            <button class="card-btn" style="background:transparent; border:1px solid #a18cd1; color:#a18cd1;">Learn More</button>
+        </div>
+
+        <div class="card glass-box">
+            <div class="badge">Focus</div>
+            <h3>JEE Timer</h3>
+            <h1 id="timer-display" style="font-size: 2.8rem; color: #00f2fe; margin: 10px 0;">25:00</h1>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="startTimer()" class="card-btn" style="padding: 8px;">Start</button>
+                <button onclick="resetTimer()" class="card-btn" style="padding: 8px; background:transparent; border:2px solid #ff0844; color:#ff0844;">Reset</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="my-chat-btn" onclick="toggleMyChat()">🚀Ai.</div>
+
+    <div class="my-chat-window" id="my-chat-window">
+        <div class="my-chat-header">
+            <span>⚡ AIR 1 Assistant</span>
+            <span style="cursor: pointer; color: #ff0844;" onclick="toggleMyChat()">✖</span>
+        </div>
+        <div class="my-chat-body" id="my-chat-body">
+            <div class="msg-ai">🤖 Hello! Main ek AI Robot Assistant hu. Aapke doubts main solve karunga!</div>
+        </div>
+        <div class="my-chat-input-area">
+            <input type="text" id="my-user-input" class="my-chat-input" placeholder="Type a message...">
+            <button class="my-send-btn" onclick="sendToGoogle()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. VIRAL SHARE LOGIC ---
+        function shareWebsite() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Target AIR 1 Hub',
+                    text: 'Bhai, yeh free premium JEE Notes aur AI Assistant wali website check kar!',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert("Link copy ho gaya! Ab doston ko WhatsApp par bhejo.");
+            }
+        }
+
+        // --- 2. TO-DO LIST LOGIC ---
+        function addTask() {
+            let input = document.getElementById('todo-input');
+            let task = input.value.trim();
+            if(task) {
+                let ul = document.getElementById('todo-list');
+                ul.innerHTML += `<li style="text-align: left; margin: 5px 0; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 5px; cursor: pointer;" onclick="this.style.textDecoration='line-through'; this.style.color='#94a3b8';">🔲 ${task}</li>`;
+                input.value = '';
+            }
+        }
+
+        // --- 3. SYLLABUS PROGRESS TRACKER ---
+        let currentProgress = 15;
+        function increaseProgress() {
+            if(currentProgress < 100) {
+                currentProgress += 5;
+                document.getElementById('syllabus-bar').style.width = currentProgress + '%';
+                document.getElementById('syllabus-bar').innerText = currentProgress + '%';
+                if(currentProgress === 100) alert("Congratulations! November Target Completed! 🚀");
+            }
+        }
+
+        // --- 4. FOCUS TIMER ---
+        let time = 1500;
+        let timerInterval;
+        let isRunning = false;
+        function startTimer() {
+            if(isRunning) return;
+            isRunning = true;
+            timerInterval = setInterval(() => {
+                if(time <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's Up! Revision ka time ho gaya.");
+                    isRunning = false;
+                    time = 1500;
+                    document.getElementById('timer-display').innerText = "25:00";
+                    return;
+                }
+                time--;
+                let min = Math.floor(time / 60);
+                let sec = time % 60;
+                document.getElementById('timer-display').innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+            }, 1000);
+        }
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            time = 1500;
+            document.getElementById('timer-display').innerText = "25:00";
+        }
+
+        // --- 5. AI CHAT LOGIC ---
+        const API_KEY = "AIzaSyD7lcJxKOpysGnGft69UT2hQG9iPlptAHE"; 
+        function toggleMyChat() {
+            const chatWin = document.getElementById('my-chat-window');
+            chatWin.style.display = (chatWin.style.display === 'flex') ? 'none' : 'flex';
+        }
+        async function sendToGoogle() {
+            const inputField = document.getElementById('my-user-input');
+            const chatBody = document.getElementById('my-chat-body');
+            const userText = inputField.value.trim();
+            if (!userText) return;
+
+            chatBody.innerHTML += `<div class="msg-user">${userText}</div>`;
+            inputField.value = '';
+            
+            const typingId = "typing-" + Date.now();
+            chatBody.innerHTML += `<div id="${typingId}" class="msg-ai">Thinking... 🤔</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: "You are an expert IIT JEE AI assistant. Be short. User asks: " + userText }] }] })
+                });
+
+                const data = await response.json();
+                document.getElementById(typingId).remove();
+                
+                if (data.error) {
+                    chatBody.innerHTML += `<div class="msg-ai" style="color: #ff0844;">Error: ${data.error.message}</div>`;
+                } else if (data.candidates && data.candidates[0].content) {
+                    let aiReply = data.candidates[0].content.parts[0].text;
+                    aiReply = aiReply.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br>");
+                    chatBody.innerHTML += `<div class="msg-ai">${aiReply}</div>`;
+                }
+            } catch (error) {
+                document.getElementById(typingId).remove();
+                chatBody.innerHTML += `<div class="msg-ai" style="color: #ff0844;">Connection Error. Tiiny.host par upload karke dekho.</div>`;
+            }
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
+</body>
+</html>
